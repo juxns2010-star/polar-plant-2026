@@ -6,212 +6,17 @@ import streamlit as st
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
-# ─────────────────────────────────────────────────────────────────────
-# 디자인: 연두색 배경 + 진한 다크 텍스트 (가독성 확보) + 둥근 UI + 장식
-# ─────────────────────────────────────────────────────────────────────
+# ── 한글 폰트 (Streamlit CSS) ──────────────────────────────────────────
 st.markdown(r"""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap');
-
-/* ── 전체 배경: 연두색 ─────────────────────────────────────────── */
-html, body {
-    background-color: #eaf6e4;
-    font-family: 'Noto Sans KR', 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
-    font-weight: 400;
-    /* 모든 기본 텍스트: 진한 다크 그레이-그린 (연두색 배경에서 높은 대비) */
-    color: #152215;
-}
-
-/* ── 메인 카드: 흰색 둥근 박스 + 부드러운 그림자 ─────────────── */
-.stApp {
-    background-color: #f8fcf7 !important;
-    border-radius: 18px;
-    box-shadow: 0 3px 16px rgba(40, 90, 30, 0.10);
-    padding: 18px 22px 28px 22px;
-    /* 메인 카드 안 텍스트도 진한 다크 */
-    color: #152215 !important;
-}
-
-/* ── 상단 장식 배너 ──────────────────────────────────────────── */
-.banner-green {
-    background: linear-gradient(120deg, #b8d8b8 0%, #d4e8d4 50%, #e8f5e9 100%);
-    border: 1px solid #8fbc8f;
-    border-radius: 14px;
-    padding: 14px 20px;
-    margin-bottom: 16px;
-    /* 배너 안 텍스트: 진한 다크 (배경이 밝아서 잘 보임) */
-    color: #152215;
-}
-.banner-green b { color: #145214; }
-
-/* ── 제목: 진한 숲 녹색 (가장 눈에 띄어야 하는 곳) ─────────── */
-h1, .stTitle {
-    color: #145214 !important;
-    font-weight: 700 !important;
-    font-size: 1.6em !important;
-}
-
-/* ── 부제목 / 캡션 / 일반 문단 텍스트: 진한 다크 ─────────────── */
-.stCaption, caption, .stMarkdown p, .stMarkdown li {
-    color: #152215 !important;
-    font-weight: 400;
-}
-.stMarkdown strong, .stMarkdown b { color: #145214 !important; }
-
-/* ── 섹션 헤더: 진한 녹색 ──────────────────────────────────────── */
-h2, .stHeader, h3, .stSubheader {
-    color: #1b5e20 !important;
-    font-weight: 600 !important;
-    letter-spacing: -0.3px;
-}
-
-/* ── metric 카드: 흰색 둥근 박스 + 녹색 강조값 ───────────────── */
-div[data-testid="stMetric"],
-div[data-testid="metric-container"] {
-    background-color: #ffffff !important;
-    border-radius: 12px !important;
-    padding: 8px 14px !important;
-    border: 1px solid #bcd8bc !important;
-    box-shadow: 0 1px 5px rgba(50,100,30,0.07) !important;
-    /* 카드 안 텍스트: 진한 다크 */
-    color: #152215 !important;
-}
-div[data-testid="stMetric"] span[data-testid="stMetricValue"],
-div[data-testid="metric-value"] {
-    color: #145214 !important;
-    font-weight: 700 !important;
-}
-div[data-testid="stMetric"] span[data-testid="stMetricLabel"],
-div[data-testid="metric-label"] {
-    color: #2a4a2a !important;
-    font-weight: 500 !important;
-}
-
-/* ── 탭: 둥근 모서리 + 연한 녹색 배경 ────────────────────────── */
-button[data-baseweb="tabs"] {
-    border-radius: 10px !important;
-    background-color: #d8ebd4 !important;
-    border: 1px solid #a5c8a5 !important;
-}
-button[data-baseweb="tabs"] nav button {
-    border-radius: 8px !important;
-    color: #152215 !important;   /* 탭 텍스트: 진한 다크 */
-    font-weight: 500;
-}
-button[data-baseweb="tabs"] nav button[aria-selected="true"] {
-    background-color: #a5d6a7 !important;
-    color: #145214 !important;
-    font-weight: 600 !important;
-}
-
-/* ── 비활성 탭 텍스트 ─────────────────────────────────────────── */
-button[data-baseweb="tabs"] nav button:not([aria-selected="true"]) {
-    color: #2a4a2a !important;
-}
-
-/* ── 사이드바: 연한 녹색 + 둥근 위젯 ──────────────────────────── */
-section[data-testid="stSidebar"] {
-    background-color: #e0f0da !important;
-    border-radius: 0 0 18px 18px;
-    /* 사이드바 텍스트: 진한 다크 */
-    color: #152215 !important;
-}
-section[data-testid="stSidebar"] .stTextInput > div > div,
-section[data-testid="stSidebar"] .stSelectbox > div > div,
-section[data-testid="stSidebar"] .stMultiselect > div > div,
-section[data-testid="stSidebar"] .stFileUploader > div > div {
-    border-radius: 8px !important;
-}
-section[data-testid="stSidebar"] label,
-section[data-testbar] .stFileUploader label,
-section[data-testid="stSidebar"] .stMarkdown p {
-    color: #152215 !important;
-}
-
-/* ── 슬라이더: 둥근 트랙 + 녹색 악센트 ────────────────────────── */
-input[type="range"] {
-    border-radius: 6px;
-    accent-color: #43a047;
-}
-
-/* ── 다운로드 버튼: 둥근 녹색 버튼 + 진한 흰색 텍스트 ────────── */
-.stDownloadButton,
-button[kind="primary"],
-button[kind="secondary"] {
-    border-radius: 8px !important;
-    background-color: #43a047 !important;
-    color: #ffffff !important;
-    border: none !important;
-    font-weight: 500 !important;
-}
-.stDownloadButton:hover,
-button[kind="primary"]:hover {
-    background-color: #2e7d32 !important;
-}
-
-/* ── dataframe: 둥근 흰색 카드 + 진한 텍스트 ─────────────────── */
-div[data-testid="stDataFrame"],
-div[data-testid="stExpandedData"] {
-    border-radius: 10px !important;
-    border: 1px solid #cde8cd !important;
-    background-color: #ffffff !important;
-    color: #152215 !important;
-}
-div[data-testid="stDataFrame"] table th,
-div[data-testid="stDataFrame"] table td {
-    color: #152215 !important;
-}
-
-/* ── 정보/경고 박스: 연한 배경 + 진한 텍스트 ─────────────────── */
-div[data-testid="stAlert"] {
-    border-radius: 10px !important;
-    background-color: #f1f7ec !important;
-    color: #152215 !important;
-}
-div[data-testid="stAlert"] strong { color: #1b5e20 !important; }
-
-/* ── plotly 차트 컨테이너: 둥근 흰색 박스 ────────────────────── */
-div[data-testid="stPlotlyChart"] {
-    border-radius: 10px !important;
-    background-color: #ffffff !important;
-    border: 1px solid #e2ead2 !important;
-}
-
-/* ── spinner ──────────────────────────────────────────────────── */
-div[data-testid="stSpinner"] {
-    border-color: #43a047 !important;
-}
-
-/* ── 구분선 ───────────────────────────────────────────────────── */
-hr {
-    border-color: #c8e6c9;
-    border-radius: 4px;
-}
-
-/* ── plotly 레이아웃 폰트 색: 진한 다크 (그래프 위에서도 잘 보임) */
-.js-plotly-plot .plotly .main-svg text,
-.js-plotly-plot .plotly .main-svg .hoverlayer text {
-    fill: #152215 !important;
-    font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif !important;
-}
-.js-plotly-plot .plotly .main-svg .hoverlayer .hovertext text {
-    fill: #152215 !important;
-}
-
-/* ── plotly 호버 박스 배경: 흰색 + 진한 텍스트 ──────────────── */
-.js-plotly-plot .plotly .hoverlayer .hovertext {
-    background-color: #ffffff !important;
-    color: #152215 !important;
-    border: 1px solid #bcd8bc !important;
-    border-radius: 6px !important;
-    box-shadow: 0 1px 4px rgba(40,90,30,0.12) !important;
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
+html, body, [class*="css"] {
+   font-family: 'Noto Sans KR', 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
 }
 </style>
 """, unsafe_allow_html=True)
 
-# ─────────────────────────────────────────────────────────────────────
-# std_cols: 열 이름 표준화 (KeyError 방지)
-# ─────────────────────────────────────────────────────────────────────
+# ── 열 이름 표준화 (std_cols) ──────────────────────────────────────────
 def std_cols(df):
     df = df.copy()
     df.columns = [str(c).strip() for c in df.columns]
@@ -243,7 +48,6 @@ def std_cols(df):
         elif "개체" in k:
             rename[c] = "개체번호"
     df = df.rename(columns=rename)
-    # 숫자형 아닌 열 중 숫자로 변환 가능한 것 변환
     for c in df.columns:
         if c in ("time", "개체번호"):
             continue
@@ -254,10 +58,8 @@ def std_cols(df):
             )
             if num.notna().mean() >= 0.5:
                 df[c] = num
-    # 생중량 열이 없고 지상부+지하부 질량이 있으면 합성
     if "생중량" not in df.columns and {"지상부 질량", "지하부 질량"} <= set(df.columns):
         df["생중량"] = df["지상부 질량"] + df["지하부 질량"]
-    # 시간 열 파싱: '20260715_0' 형식 대응
     if "time" in df.columns:
         t = df["time"].astype(str).str.strip()
         parsed = pd.to_datetime(t, errors="coerce", format="mixed")
@@ -272,9 +74,7 @@ def std_cols(df):
     return df
 
 
-# ─────────────────────────────────────────────────────────────────────
-# CSV 읽기: utf-8-sig → cp949 순서로 시도
-# ─────────────────────────────────────────────────────────────────────
+# ── CSV 읽기 (인코딩 이중 시도) ───────────────────────────────────────
 @st.cache_data
 def read_csv(file):
     data = file.getvalue()
@@ -286,13 +86,12 @@ def read_csv(file):
     return pd.DataFrame()
 
 
-# ─────────────────────────────────────────────────────────────────────
-# 학교명 추출 (파일명에서 자동)
-# ─────────────────────────────────────────────────────────────────────
+# ── 학교명 추출 ───────────────────────────────────────────────────────
 def school_name(filename):
     if not filename:
         return "우리 학교"
     base = os.path.splitext(filename)[0]
+    # 첫 번째 '_' 또는 '.' 앞까지가 학교명 후보
     for sep in ("_", "."):
         if sep in base:
             candidate = base.split(sep)[0]
@@ -301,34 +100,59 @@ def school_name(filename):
     return base[:6] if len(base) >= 2 else base
 
 
-# ─────────────────────────────────────────────────────────────────────
-# CSV 다운로드용 바이트 생성 (utf-8-sig → 한글 깨짐 방지)
-# ─────────────────────────────────────────────────────────────────────
+# ── 공통: 추세선 있는 산점도 ──────────────────────────────────────────
+def scatter_with_fit(x, y, xlabel, ylabel, title, color="#1f77b4"):
+    xy = pd.DataFrame({xlabel: x, ylabel: y}).dropna()
+    if len(xy) < 2:
+        st.info(f"⚠️ '{title}': 데이터가 충분하지 않아 그래프를 그리지 못했어요.")
+        return None
+    xvals = xy.iloc[:, 0].values
+    yvals = xy.iloc[:, 1].values
+    r = np.corrcoef(xvals, yvals)[0, 1]
+    slope, intercept = np.polyfit(xvals, yvals, 1)
+    fit_x = np.linspace(xvals.min(), xvals.max(), 100)
+    fit_y = slope * fit_x + intercept
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(
+        x=xvals, y=yvals, mode="markers",
+        marker=dict(size=8, color=color, opacity=0.75),
+        hovertemplate=f"<b>%{xlabel}</b>: %{{x:.1f}}<br><b>%{ylabel}</b>: %{{y:.2f}}<extra></extra>",
+        name="데이터",
+    ))
+    fig.add_trace(go.Scatter(
+        x=fit_x, y=fit_y, mode="lines",
+        line=dict(color="red", width=2, dash="dash"),
+        name=f"추세선 (r = {r:.3f})",
+        hoverinfo="skip",
+    ))
+    fig.update_layout(
+        title=dict(text=f"{title}  (r = {r:.3f})", x=0.5, font=dict(size=14)),
+        xaxis_title=xlabel,
+        yaxis_title=ylabel,
+        template="plotly_white",
+        font=dict(family="Malgun Gothic, Apple SD Gothic Neo, sans-serif"),
+        height=360,
+        margin=dict(l=40, r=20, t=50, b=40),
+    )
+    return fig
+
+
+# ── CSV 다운로드 도우미 ────────────────────────────────────────────────
 def csv_bytes(df):
     return df.to_csv(index=False).encode("utf-8-sig")
 
 
-# ═════════════════════════════════════════════════════════════════════
+# ═══════════════════════════════════════════════════════════════════════
 st.set_page_config(page_title="극지식물 생육 차이 분석 대시보드", layout="wide")
 
-# ── 상단 장식 배너 ──────────────────────────────────────────────────
-st.markdown(
-    """
-    <div class="banner-green">
-        <b>🌱 같은 스마트팜, 다른 결과?</b><br>
-        같은 환경에서 자란 극지식물 개체들 사이에 나타나는 <b>큰 생육 차이</b>와<br>
-        그 차이를 만드는 <b>핵심 요인</b>을 함께 살펴봅시다.
-    </div>
-    """,
-    unsafe_allow_html=True,
+st.title("극지식물 생육 차이 핵심 요인 분석 대시보드: 길이보다 '잎 수'가 생중량을 결정한다")
+
+st.caption(
+    "같은 스마트팜 환경에서 자란 극지식물 개체들 사이에 나타나는 큰 생육 차이와 "
+    "그 차이를 만드는 핵심 요인을 함께 살펴봅시다. 📊"
 )
 
-st.title("🌿 극지식물 생육 차이 핵심 요인 분석 대시보드")
-st.caption("길이보다 '잎 수'가 생중량을 결정한다 — 같은 환경, 다른 개체, 다른 결과")
-
-# ─────────────────────────────────────────────────────────────────────
-# 사이드바
-# ─────────────────────────────────────────────────────────────────────
+# ── 사이드바: 파일 업로드 ───────────────────────────────────────────────
 st.sidebar.header("📁 데이터 업로드")
 env_file = st.sidebar.file_uploader("🌡️ 환경 데이터 CSV", type="csv")
 growth_file = st.sidebar.file_uploader("🌱 생육 결과 데이터 CSV", type="csv")
@@ -343,15 +167,14 @@ if growth_file is not None:
         "잎 수", "지상부 길이", "지하부 길이",
         "생중량", "지상부 질량", "지하부 질량",
     ]
-    growth_cols_raw = [c for c in candidates if c in gtmp.columns]
+    growth_cols_raw = [
+        c for c in candidates if c in gtmp.columns
+    ]
 
 selected_growth = st.sidebar.multiselect(
     "분포·변동계수(CV) 비교에 사용할 항목",
     growth_cols_raw,
-    default=[
-        c for c in growth_cols_raw
-        if c in ("잎 수", "지상부 길이", "지하부 길이", "생중량")
-    ],
+    default=[c for c in growth_cols_raw if c in ("잎 수", "지상부 길이", "지하부 길이", "생중량")],
 )
 
 if growth_cols_raw:
@@ -362,26 +185,27 @@ else:
 env_name = school_name(env_file.name if env_file else None)
 growth_name = school_name(growth_file.name if growth_file else None)
 
+# ── 데이터 로딩 ( spinner ) ───────────────────────────────────────────
 st.sidebar.markdown("---")
-st.sidebar.caption("⏳ 로딩 중…")
+st.sidebar.caption("로딩 중…")
 
 env_df = pd.DataFrame()
 growth_df = pd.DataFrame()
 
 if env_file is not None:
-    with st.spinner("🌡️ 환경 데이터 읽는 중…"):
+    with st.spinner("환경 데이터 읽는 중…"):
         env_df = std_cols(read_csv(env_file))
 if growth_file is not None:
-    with st.spinner("🌱 생육 데이터 읽는 중…"):
+    with st.spinner("생육 데이터 읽는 중…"):
         growth_df = std_cols(read_csv(growth_file))
 
 st.sidebar.markdown("---")
 st.sidebar.caption(
-    f"🌡️ 환경: {env_name}  ·  🌱 생육: {growth_name}"
+    f"환경: {env_name} · 생육: {growth_name}"
     if env_file or growth_file else "아직 파일이 업로드되지 않았어요."
 )
 
-# ═════════════════════════════════════════════════════════════════════
+# ═══════════════════════════════════════════════════════════════════════
 tabs = st.tabs([
     "📊 스마트팜 환경 및 개체별 생육 분포",
     "🔗 생육 변수 간 상관관계 및 가설 검증",
@@ -393,24 +217,20 @@ tabs = st.tabs([
 # ─────────────────────────────────────────────────────────────────────
 with tabs[0]:
     try:
+        # ── 파일 안내 ────────────────────────────────────────────────
         if env_file is None and growth_file is None:
             st.info("☝️ 사이드바에서 환경 CSV와 생육 CSV를 각각 올려주세요.")
         else:
             env_ready = not env_df.empty
             growth_ready = not growth_df.empty
 
-            # ── 환경 요약 카드 ──────────────────────────────────────
+            # ── 환경 시계열 그래프 ────────────────────────────────────
             if env_ready:
                 env_cols_display = [
                     c for c in ["temperature", "humidity", "ph", "ec"]
                     if c in env_df.columns
                 ]
                 if env_cols_display:
-                    st.subheader("🌡️ 환경 지표 요약 카드")
-                    st.caption(
-                        "각 지표의 <b>평균</b>, <b>표준편차(SD)</b>, "
-                        "그리고 <b>최솟값 ~ 최댓값</b> 범위를 카드 하나로 보여줘요."
-                    )
                     col1, col2, col3, col4 = st.columns(4)
                     with col1:
                         st.metric(
@@ -436,6 +256,7 @@ with tabs[0]:
                             f"{env_df['ph'].dropna().mean():.1f}"
                             if "ph" in env_df.columns else "—",
                         )
+
                     ecols = st.columns(min(len(env_cols_display), 3))
                     for idx, cname in enumerate(env_cols_display):
                         s = env_df[cname].dropna()
@@ -447,6 +268,7 @@ with tabs[0]:
                             f"평균 {s.mean():.2f} · SD {s.std():.2f}",
                             delta=f"범위: {s.min():.2f} ~ {s.max():.2f}",
                         )
+
                     # 시계열 서브플롯
                     n_env = len(env_cols_display)
                     if n_env > 0:
@@ -474,8 +296,7 @@ with tabs[0]:
                                     mode="lines", name=cname,
                                     line=dict(color=color, width=1.5),
                                     hovertemplate=(
-                                        f"<b>{cname}</b><br>"
-                                        f"%{{x|%Y-%m-%d %H:%M}}<br>"
+                                        f"<b>{cname}</b><br>%{{x|%Y-%m-%d %H:%M}}<br>"
                                         f"값: %{{y:.2f}}<extra></extra>"
                                     ),
                                 ),
@@ -484,25 +305,17 @@ with tabs[0]:
                         fig_env.update_layout(
                             title="📅 날짜별 환경 지표 시계열",
                             template="plotly_white",
-                            font=dict(
-                                family="Malgun Gothic, Apple SD Gothic Neo, sans-serif",
-                                color="#152215",
-                            ),
+                            font=dict(family="Malgun Gothic, Apple SD Gothic Neo, sans-serif"),
                             height=260 + 160 * (n_rows - 1),
                             margin=dict(l=40, r=20, t=40, b=30),
                         )
                         st.plotly_chart(fig_env, width="stretch")
                 else:
-                    st.info(
-                        "⚠️ 환경 CSV에 인식할 수 있는 열(온도, 습도, EC, pH)이 없어요."
-                    )
+                    st.info("⚠️ 환경 CSV에 인식할 수 있는 열(온도, 습도, EC, pH)이 없어요.")
 
-            # ── 개체별 생중량 막대그래프 ────────────────────────────
+            # ── 개체별 생중량 막대그래프 ───────────────────────────────
             if growth_ready and "생중량" in growth_df.columns:
-                g_sorted = (
-                    growth_df.sort_values("생중량", ascending=False)
-                    .reset_index(drop=True)
-                )
+                g_sorted = growth_df.sort_values("생중량", ascending=False).reset_index(drop=True)
                 n = len(g_sorted)
                 if n > 0:
                     top_n = max(1, n // 4)
@@ -510,49 +323,39 @@ with tabs[0]:
                     colors = []
                     for i in range(n):
                         if i < top_n:
-                            colors.append("#e74c3c")
+                            colors.append("#e74c3c")       # 상위: 빨강
                         elif i >= n - bottom_n:
-                            colors.append("#27ae60")
+                            colors.append("#27ae60")       # 하위: 초록
                         else:
-                            colors.append("#95a5a6")
+                            colors.append("#95a5a6")       # 중간: 회색
                     fig_bar = go.Figure()
                     fig_bar.add_trace(go.Bar(
                         x=[str(v) for v in g_sorted["개체번호"].values],
                         y=g_sorted["생중량"].values,
                         marker_color=colors,
                         hovertemplate=(
-                            "<b>개체 %{x}</b><br>생중량: %{y:.2f} g"
-                            "<extra></extra>"
+                            "<b>개체 %{x}</b><br>생중량: %{y:.2f} g<extra></extra>"
                         ),
                     ))
+                    # 상위·하위 레이블 주석
                     if top_n > 0:
                         fig_bar.add_annotation(
-                            x=top_n - 0.5,
-                            y=g_sorted["생중량"].iloc[top_n - 1],
-                            text="⬆ 상위 25%",
-                            showarrow=False,
-                            font=dict(size=11, color="#152215"),
+                            x=top_n - 0.5, y=g_sorted["생중량"].iloc[top_n - 1],
+                            text="⬆ 상위", showarrow=False,
+                            font=dict(size=11, color="#e74c3c"),
                             yshift=5,
                         )
                     if bottom_n > 0:
                         fig_bar.add_annotation(
-                            x=n - bottom_n - 0.5,
-                            y=g_sorted["생중량"].iloc[n - bottom_n],
-                            text="⬇ 하위 25%",
-                            showarrow=False,
-                            font=dict(size=11, color="#152215"),
+                            x=n - bottom_n - 0.5, y=g_sorted["생중량"].iloc[n - bottom_n],
+                            text="⬇ 하위", showarrow=False,
+                            font=dict(size=11, color="#27ae60"),
                             yshift=5,
                         )
                     fig_bar.update_layout(
-                        title=(
-                            "🌱 개체별 생중량 분포 "
-                            "(상위 25% 빨강 · 하위 25% 초록)"
-                        ),
+                        title="🌱 개체별 생중량 분포 (상위 25% 빨강 · 하위 25% 초록)",
                         template="plotly_white",
-                        font=dict(
-                            family="Malgun Gothic, Apple SD Gothic Neo, sans-serif",
-                            color="#152215",
-                        ),
+                        font=dict(family="Malgun Gothic, Apple SD Gothic Neo, sans-serif"),
                         xaxis_title="개체",
                         yaxis_title="생중량 (g)",
                         height=360,
@@ -562,12 +365,9 @@ with tabs[0]:
                 else:
                     st.info("⚠️ 생육 데이터에 생중량 값이 없어요.")
             elif growth_ready:
-                st.info(
-                    "⚠️ 생육 CSV에 '생중량' 열이 없어요. "
-                    "(지상부 질량 + 지하부 질량으로 자동 계산되었을 수 있어요.)"
-                )
+                st.info("⚠️ 생육 CSV에 '생중량' 열이 없어요. (지상부 질량 + 지하부 질량으로 자동 계산되었을 수 있어요.)")
 
-            # ── 생육 항목 분포 & CV 비교 표 ─────────────────────────
+            # ── 생육 측정 항목 분포 & CV 비교 표 ──────────────────────
             if growth_ready and selected_growth:
                 dist_tables = []
                 for sname in selected_growth:
@@ -602,9 +402,8 @@ with tabs[0]:
                     df_dist = pd.DataFrame(dist_tables)
                     st.subheader("📋 생육 측정 항목별 분포 및 변동계수(CV) 비교")
                     st.caption(
-                        "💡 <b>변동계수(CV)</b> = (표준편차 ÷ 평균) × 100%. "
-                        "값이 클수록 <b>개체 간 차이가 크다</b>는 뜻이에요. "
-                        "평균이 0이면 CV는 표시하지 않아요."
+                        "💡 변동계수(CV) = (표준편차 ÷ 평균) × 100%. "
+                        "값이 클수록 개체 간 차이가 크다는 뜻이에요. 평균이 0이면 CV는 표시하지 않아요."
                     )
                     st.dataframe(df_dist, width="stretch", use_container_width=False)
                     st.download_button(
@@ -615,9 +414,7 @@ with tabs[0]:
                         key="tab1_cv_download",
                     )
             elif growth_ready:
-                st.info(
-                    "☝️ 사이드바에서 분포·CV 비교에 사용할 생육 항목을 골라주세요."
-                )
+                st.info("☝️ 사이드바에서 분포·CV 비교에 사용할 생육 항목을 골라주세요.")
 
     except Exception as e:
         st.warning(f"⚠️ 이 부분은 데이터 형식 때문에 표시하지 못했어요: {e}")
@@ -630,6 +427,7 @@ with tabs[1]:
         if growth_file is None or growth_df.empty:
             st.info("☝️ 사이드바에서 생육 CSV를 올려주세요. 상관관계 그래프를 볼 수 있어요.")
         else:
+            # 필요한 열 확인
             needed_pairs = [
                 ("지상부 길이", "지하부 길이", "지상부 길이 vs 지하부 길이", "#3498db"),
                 ("지상부 길이", "생중량", "지상부 길이 vs 생중량", "#e67e22"),
@@ -641,14 +439,11 @@ with tabs[1]:
                 if p[0] in growth_df.columns and p[1] in growth_df.columns
             ]
             if not available_pairs:
-                st.info(
-                    "⚠️ 생육 CSV에 산점도에 필요한 열"
-                    "(길이·잎 수·생중량)이 없어요."
-                )
+                st.info("⚠️ 생육 CSV에 산점도에 필요한 열(길이·잎 수·생중량)이 없어요.")
             else:
                 st.caption(
-                    "💡 <b>상관계수 r</b>: -1(완전 반대) ~ +1(완전 같은 방향). "
-                    "0에 가까울수록 두 값 사이에 <b>뚜렷한 관계가 없다</b>는 뜻이에요."
+                    "💡 상관계수 r: -1(완전 반대) ~ +1(완전 같은 방향). "
+                    "0에 가까울수록 두 값 사이에 뚜렷한 관계가 없다는 뜻이에요."
                 )
                 n_cols = 2
                 n_rows = (len(available_pairs) + 1) // 2
@@ -695,25 +490,21 @@ with tabs[1]:
                 fig_scatter.update_layout(
                     title="📊 생육 변수 간 상관관계 비교 (빨간 점선 = 추세선)",
                     template="plotly_white",
-                    font=dict(
-                        family="Malgun Gothic, Apple SD Gothic Neo, sans-serif",
-                        color="#152215",
-                    ),
+                    font=dict(family="Malgun Gothic, Apple SD Gothic Neo, sans-serif"),
                     height=300 + 180 * (n_rows - 1),
                     margin=dict(l=40, r=20, t=50, b=40),
                 )
                 st.plotly_chart(fig_scatter, width="stretch")
 
+                # 가설 정리 카드
                 st.subheader("🔍 세 가지 가설 검토")
-                st.markdown(
-                    """
-                    | 가설 | 기대 | 실제 데이터에서의 확인 |
-                    |------|------|------------------------|
-                    | ① 길이 지표끼리는 강하게 연관된다 | 지상부 길이와 지하부 길이는 함께 자란다 | 산점도에서 r 값을 직접 확인하세요 |
-                    | ② 길이만으로는 생중량을 충분히 설명하기 어렵다 | r ≈ 0.2~0.3 수준 | 지상부·지하부 길이 vs 생중량 r 값이 낮다면 이 가설이 지지돼요 |
-                    | ③ '잎 수'는 생중량을 가장 잘 설명한다 | r이 가장 높고 상·하위 그룹을 뚜렷이 구분 | 잎 수 vs 생중량 r이 다른 지표보다 높으면 핵심 지표예요 |
-                    """.strip()
-                )
+                st.markdown("""
+                | 가설 | 기대 | 실제 데이터에서의 확인 |
+                |------|------|------------------------|
+                | ① 길이 지표끼리는 강하게 연관된다 | 지상부 길이와 지하부 길이는 함께 자란다 | 산점도에서 r 값을 직접 확인하세요 |
+                | ② 길이만으로는 생중량을 충분히 설명하기 어렵다 | r ≈ 0.2~0.3 수준 |지상부·지하부 길이 vs 생중량 r 값이 낮다면 이 가설이 지지돼요 |
+                | ③ '잎 수'는 생중량을 가장 잘 설명한다 | r이 가장 높고 상·하위 그룹을 뚜렷이 구분 | 잎 수 vs 생중량 r이 다른 지표보다 높으면 핵심 지표예요 |
+                """.strip())
 
     except Exception as e:
         st.warning(f"⚠️ 이 부분은 데이터 형식 때문에 표시하지 못했어요: {e}")
@@ -724,31 +515,24 @@ with tabs[1]:
 with tabs[2]:
     try:
         if growth_file is None or growth_df.empty:
-            st.info(
-                "☝️ 사이드바에서 생육 CSV를 올려주세요. "
-                "그룹 비교와 예측 시뮬레이터가 활성화돼요."
-            )
+            st.info("☝️ 사이드바에서 생육 CSV를 올려주세요. 그룹 비교와 예측 시뮬레이터가 활성화돼요.")
         else:
+            # 생중량이 있어야 그룹 비교 가능
             if "생중량" not in growth_df.columns:
-                st.info(
-                    "⚠️ 생육 CSV에 '생중량' 열이 없어 그룹 비교를 진행하지 못해요."
-                )
+                st.info("⚠️ 생육 CSV에 '생중량' 열이 없어 그룹 비교를 진행하지 못해요.")
             else:
-                g = growth_df[
-                    ["개체번호", "생중량", "잎 수", "지상부 길이", "지하부 길이"]
-                ].copy()
+                g = growth_df[["개체번호", "생중량", "잎 수", "지상부 길이", "지하부 길이"]].copy()
                 g = g.dropna(subset=["생중량"])
                 if len(g) < 4:
-                    st.info(
-                        "⚠️ 생중량 값이 있는 개체가 너무 적어"
-                        "(상·하위 각 25% = 최소 2개 필요) 그룹을 나눌 수 없어요."
-                    )
+                    st.info("⚠️ 생중량 값이 있는 개체가 너무 적어(상·하위 각 25% = 최소 2개 필요) 그룹을 나눌 수 없어요.")
                 else:
+                    # 상위 25% / 하위 25% 임계값
                     q75 = g["생중량"].quantile(0.75)
                     q25 = g["생중량"].quantile(0.25)
                     high = g[g["생중량"] >= q75].copy()
                     low = g[g["생중량"] <= q25].copy()
 
+                    # 상·하위 그룹 평균 비교 막대그래프
                     compare_items = []
                     for item, unit, col_name in [
                         ("잎 수", "장", "잎 수"),
@@ -757,10 +541,8 @@ with tabs[2]:
                     ]:
                         if col_name not in g.columns:
                             continue
-                        h_vals = high[col_name].dropna()
-                        l_vals = low[col_name].dropna()
-                        h_mean = h_vals.mean() if not h_vals.empty else float("nan")
-                        l_mean = l_vals.mean() if not l_vals.empty else float("nan")
+                        h_mean = high[col_name].dropna().mean() if not high[col_name].dropna().empty else float("nan")
+                        l_mean = low[col_name].dropna().mean() if not low[col_name].dropna().empty else float("nan")
                         if np.isnan(h_mean) and np.isnan(l_mean):
                             continue
                         compare_items.append((item, unit, h_mean, l_mean))
@@ -785,16 +567,10 @@ with tabs[2]:
                             textposition="outside",
                         ))
                         fig_cmp.update_layout(
-                            title=(
-                                "📈 생중량 상·하위 그룹의 "
-                                "측정 항목별 평균 비교"
-                            ),
+                            title="📈 생중량 상·하위 그룹의 측정 항목별 평균 비교",
                             barmode="group",
                             template="plotly_white",
-                            font=dict(
-                                family="Malgun Gothic, Apple SD Gothic Neo, sans-serif",
-                                color="#152215",
-                            ),
+                            font=dict(family="Malgun Gothic, Apple SD Gothic Neo, sans-serif"),
                             xaxis_title="측정 항목",
                             yaxis_title="평균값",
                             height=380,
@@ -802,21 +578,18 @@ with tabs[2]:
                         )
                         st.plotly_chart(fig_cmp, width="stretch")
 
+                        # 그룹별 요약 통계
                         st.subheader("📋 상·하위 그룹 측정 항목별 평균")
                         rows_tbl = []
                         for it in compare_items:
-                            rows_tbl.append(
-                                {
-                                    "측정 항목": f"{it[0]} ({it[1]})",
-                                    "상위 25% 평균": f"{it[2]:.2f}",
-                                    "하위 25% 평균": f"{it[3]:.2f}",
-                                    "차이 (상위 − 하위)": f"{it[2] - it[3]:.2f}",
-                                }
-                            )
+                            rows_tbl.append({
+                                "측정 항목": f"{it[0]} ({it[1]})",
+                                "상위 25% 평균": f"{it[2]:.2f}",
+                                "하위 25% 평균": f"{it[3]:.2f}",
+                                "차이 (상위 − 하위)": f"{it[2] - it[3]:.2f}",
+                            })
                         df_cmp_table = pd.DataFrame(rows_tbl)
-                        st.dataframe(
-                            df_cmp_table, width="stretch", use_container_width=False
-                        )
+                        st.dataframe(df_cmp_table, width="stretch", use_container_width=False)
                         st.download_button(
                             "📥 그룹 비교 표 다운로드 (CSV)",
                             csv_bytes(df_cmp_table),
@@ -825,7 +598,7 @@ with tabs[2]:
                             key="tab3_group_download",
                         )
 
-                    # ── 예측 시뮬레이터 ──────────────────────────────
+                    # ── 예측 시뮬레이터 ──────────────────────────────────
                     st.markdown("---")
                     st.subheader("🔮 간이 생중량 예측 시뮬레이터")
                     st.caption(
@@ -834,40 +607,23 @@ with tabs[2]:
                         "(실제 생중량과는 개체별 차이가 있을 수 있어요!)"
                     )
 
-                    has_leaf = (
-                        "잎 수" in g.columns
-                        and not g["잎 수"].dropna().empty
-                    )
-                    has_abv = (
-                        "지상부 길이" in g.columns
-                        and not g["지상부 길이"].dropna().empty
-                    )
-                    has_biomass = (
-                        "생중량" in g.columns
-                        and not g["생중량"].dropna().empty
-                    )
+                    has_leaf = "잎 수" in g.columns and not g["잎 수"].dropna().empty
+                    has_abv = "지상부 길이" in g.columns and not g["지상부 길이"].dropna().empty
+                    has_biomass = "생중량" in g.columns and not g["생중량"].dropna().empty
 
                     if has_leaf and has_abv and has_biomass:
-                        lm = g[
-                            ["잎 수", "지상부 길이", "생중량"]
-                        ].dropna()
+                        lm = g[["잎 수", "지상부 길이", "생중량"]].dropna()
                         if len(lm) >= 5:
+                            # 다중 회귀: 생중량 ~ 잎 수 + 지상부 길이
                             X = lm[["잎 수", "지상부 길이"]].values
                             y = lm["생중량"].values
-                            X_design = np.column_stack(
-                                [np.ones(len(X)), X]
-                            )
-                            beta = np.linalg.lstsq(
-                                X_design, y, rcond=None
-                            )[0]
+                            X_design = np.column_stack([np.ones(len(X)), X])
+                            beta = np.linalg.lstsq(X_design, y, rcond=None)[0]
                             intercept_m, beta_leaf, beta_abv = beta
 
-                            leaf_r = np.corrcoef(
-                                lm["잎 수"], lm["생중량"]
-                            )[0, 1]
-                            abv_r = np.corrcoef(
-                                lm["지상부 길이"], lm["생중량"]
-                            )[0, 1]
+                            # 개별 단순 회귀도 표시
+                            leaf_r = np.corrcoef(lm["잎 수"], lm["생중량"])[0, 1]
+                            abv_r = np.corrcoef(lm["지상부 길이"], lm["생중량"])[0, 1]
 
                             leaf_max = int(lm["잎 수"].max())
                             abv_max = int(lm["지상부 길이"].max())
@@ -878,9 +634,7 @@ with tabs[2]:
                                     "🍃 잎 수 (장)",
                                     min_value=0,
                                     max_value=max(leaf_max, 10),
-                                    value=min(
-                                        int(lm["잎 수"].median()), leaf_max
-                                    ),
+                                    value=min(int(lm["잎 수"].median()), leaf_max),
                                     step=1,
                                 )
                             with c2:
@@ -888,77 +642,50 @@ with tabs[2]:
                                     "📏 지상부 길이 (mm)",
                                     min_value=0,
                                     max_value=max(abv_max, 10),
-                                    value=min(
-                                        int(lm["지상부 길이"].median()),
-                                        abv_max,
-                                    ),
+                                    value=min(int(lm["지상부 길이"].median()), abv_max),
                                     step=1,
                                 )
 
-                            pred_biomass = max(
-                                0,
-                                intercept_m
-                                + beta_leaf * leaf_input
-                                + beta_abv * abv_input,
-                            )
+                            pred_biomass = max(0, intercept_m + beta_leaf * leaf_input + beta_abv * abv_input)
 
                             st.markdown("---")
                             p1, p2, p3 = st.columns(3)
                             p1.metric("입력: 잎 수", f"{leaf_input} 장")
-                            p2.metric(
-                                "입력: 지상부 길이", f"{abv_input} mm"
-                            )
+                            p2.metric("입력: 지상부 길이", f"{abv_input} mm")
                             p3.metric(
                                 "🎯 예상 생중량",
                                 f"{pred_biomass:.2f} g",
-                                delta=(
-                                    f"잎 수 r = {leaf_r:.3f}"
-                                    f" · 길이 r = {abv_r:.3f}"
-                                ),
+                                delta=f"잎 수 r = {leaf_r:.3f} · 길이 r = {abv_r:.3f}",
                             )
 
                             st.info(
-                                f"💡 회귀식: "
-                                f"예상 생중량(g) = {intercept_m:.3f}"
-                                f" + ({beta_leaf:.4f}) × 잎 수"
-                                f" + ({beta_abv:.4f}) × 지상부 길이\n"
-                                f"→ 이 데이터에서는 "
-                                f"**잎 수**가 생중량을 설명하는 데 "
-                                f"더 큰 역할을 해요 (r = {leaf_r:.3f})."
+                                f"💡 회귀식: 예상 생중량(g) = {intercept_m:.3f}"
+                                f" + ({beta_leaf:.4f}) × 잎 수 + ({beta_abv:.4f}) × 지상부 길이\n"
+                                f"→ 이 데이터에서는 **잎 수**가 생중량을 설명하는 데 더 큰 역할을 해요 (r = {leaf_r:.3f})."
                             )
 
+                            # 회귀 유의성 정보
                             st.caption(
-                                "⚠️ 이 예측식은 해당 학교 데이터에만 맞춘 "
-                                "간이 모델이에요. 개체 수가 적거나 환경이 "
-                                "다른 학교에서는 결과가 다를 수 있어요. "
-                                "과학적으로는 개체 수를 늘리고 여러 환경에서 "
-                                "반복 측정하는 후속 실험이 필요해요."
+                                "⚠️ 이 예측식은 해당 학교 데이터에만 맞춘 간이 모델이에요. "
+                                "개체 수가 적거나 환경이 다른 학교에서는 결과가 다를 수 있어요. "
+                                "과학적으로는 개체 수를 늘리고 여러 환경에서 반복 측정하는 후속 실험이 필요해요."
                             )
                         else:
-                            st.info(
-                                "⚠️ 회귀식을 만들기에 데이터가 충분하지 않아요."
-                            )
+                            st.info("⚠️ 회귀식을 만들기에 데이터가 충분하지 않아요.")
                     else:
-                        st.info(
-                            "⚠️ 예측 시뮬레이터를 사용하려면 "
-                            "'잎 수', '지상부 길이', '생중량' 열이 "
-                            "모두 필요해요."
-                        )
+                        st.info("⚠️ 예측 시뮬레이터를 사용하려면 '잎 수', '지상부 길이', '생중량' 열이 모두 필요해요.")
 
-                    # ── 데이터 한계점 & 후속 실험 ───────────────────
+                    # ── 데이터 한계점 & 후속 실험 제안 ───────────────────
                     st.markdown("---")
                     st.subheader("📌 데이터 한계점 및 후속 실험 제안")
-                    st.markdown(
-                        """
-                        | 구분 | 내용 |
-                        |------|------|
-                        | **데이터 한계** | 생중량 차이가 약 30배에 달할 정도로 개체 간 편차가 크며, 길이 지표(지상부·지하부 길이)와 생중량 사이의 상관계수가 낮아 길이만으로는 생중량을 충분히 예측하기 어려워요. |
-                        | **핵심 발견** | '잎 수'가 생중량과 가장 높은 상관관계를 보이며, 생중량 상위·하위 그룹을 가장 뚜렷하게 구분해요. 즉, 길이보다 잎의 수가 생중량 차이의 핵심 지표예요. |
-                        | **후속 실험 ①** | 개체 수를 현재보다 늘리고(최소 90개체 이상), 동일 환경에서 반복 재배하여 잎 수-생중량 관계의 안정성을 확인해요. |
-                        | **후속 실험 ②** | 온도·습도·EC·pH 조건을 조금씩 바꾼 여러 스마트팜 구획을 만들어, 환경 조건이 잎 수와 생중량 관계에 미치는 영향을 비교해요. |
-                        | **후속 실험 ③** | 잎 면적, 잎 두께, 엽록소 함량 등 추가 형질을 측정해 생중량을 더 정밀하게 설명하는 복합 지표를 개발해요. |
-                        """.strip()
-                    )
-
+                    st.markdown("""
+                    | 구분 | 내용 |
+                    |------|------|
+                    | **데이터 한계** | 생중량 차이가 약 30배에 달할 정도로 개체 간 편차가 크며, 길이 지표(지상부·지하부 길이)와 생중량 사이의 상관계수가 낮아 길이만으로는 생중량을 충분히 예측하기 어려워요. |
+                    | **핵심 발견** | '잎 수'가 생중량과 가장 높은 상관관계를 보이며, 생중량 상위·하위 그룹을 가장 뚜렷하게 구분해요. 즉, 길이보다 잎의 수가 생중량 차이의 핵심 지표예요. |
+                    | **후속 실험 ①** | 개체 수를 현재보다 늘리고(최소 90개체 이상), 동일 환경에서 반복 재배하여 잎 수-생중량 관계의 안정성을 확인해요. |
+                    | **후속 실험 ②** | 온도·습도·EC·pH 조건을 조금씩 바꾼 여러 스마트팜 구획을 만들어, 환경 조건이 잎 수와 생중량 관계에 미치는 영향을 비교해요. |
+                    | **후속 실험 ③** | 잎 면적, 잎 두께, 엽록소 함량 등 추가 형질을 측정해 생중량을 더 정밀하게 설명하는 복합 지표를 개발해요. |
+                    """.strip())
     except Exception as e:
         st.warning(f"⚠️ 이 부분은 데이터 형식 때문에 표시하지 못했어요: {e}")
