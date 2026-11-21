@@ -7,7 +7,7 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
 # ─────────────────────────────────────────────────────────────────────
-# 디자인: 연두 배경 + 진한 글자(검은색에 가까운 어두운 색) + 둥근 UI
+# 디자인: 연두색 배경 + 진한 다크 텍스트 (가독성 확보) + 둥근 UI + 장식
 # ─────────────────────────────────────────────────────────────────────
 st.markdown(r"""
 <style>
@@ -15,99 +15,106 @@ st.markdown(r"""
 
 /* ── 전체 배경: 연두색 ─────────────────────────────────────────── */
 html, body {
-    background-color: #e6f4e0;
+    background-color: #eaf6e4;
     font-family: 'Noto Sans KR', 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
     font-weight: 400;
-    color: #111811;          /* 매우 진한 녹색빛 검은색 → 흰/연두 위에서도 선명 */
+    /* 모든 기본 텍스트: 진한 다크 그레이-그린 (연두색 배경에서 높은 대비) */
+    color: #152215;
 }
 
 /* ── 메인 카드: 흰색 둥근 박스 + 부드러운 그림자 ─────────────── */
 .stApp {
-    background-color: #ffffff !important;
+    background-color: #f8fcf7 !important;
     border-radius: 18px;
-    box-shadow: 0 4px 20px rgba(50, 90, 30, 0.14);
-    padding: 18px 24px 30px 24px;
+    box-shadow: 0 3px 16px rgba(40, 90, 30, 0.10);
+    padding: 18px 22px 28px 22px;
+    /* 메인 카드 안 텍스트도 진한 다크 */
+    color: #152215 !important;
 }
 
 /* ── 상단 장식 배너 ──────────────────────────────────────────── */
 .banner-green {
-    background: linear-gradient(120deg, #b8deb0 0%, #d4edda 55%, #e8f5e9 100%);
-    border: 1px solid #86c896;
+    background: linear-gradient(120deg, #b8d8b8 0%, #d4e8d4 50%, #e8f5e9 100%);
+    border: 1px solid #8fbc8f;
     border-radius: 14px;
-    padding: 14px 22px;
+    padding: 14px 20px;
     margin-bottom: 16px;
+    /* 배너 안 텍스트: 진한 다크 (배경이 밝아서 잘 보임) */
+    color: #152215;
 }
-.banner-green b {
-    color: #0d3d0d;          /* 진한 초록-검정 → 배너 위에서도 또렷 */
-    font-size: 1.05em;
-}
-.banner-green span {
-    color: #1a4a1a;
-}
+.banner-green b { color: #145214; }
 
-/* ── 제목: 검은색에 가까운 진한 녹색 ─────────────────────────── */
+/* ── 제목: 진한 숲 녹색 (가장 눈에 띄어야 하는 곳) ─────────── */
 h1, .stTitle {
-    color: #0a2e0a !important;   /* 거의 검은 녹색 → 짧은 제목이라도 선명 */
+    color: #145214 !important;
     font-weight: 700 !important;
     font-size: 1.6em !important;
-    text-shadow: 0 1px 2px rgba(255,255,255,0.5);
 }
 
-/* ── 부제목 / 캡션 / 일반 문단 ────────────────────────────────── */
-.stCaption, caption, .stMarkdown p,
-.stMarkdown li, .stMarkdown td, .stMarkdown th {
-    color: #0f260f !important;   /* 진한 녹흑 → 연두·흰 배경 위 가독성 확보 */
+/* ── 부제목 / 캡션 / 일반 문단 텍스트: 진한 다크 ─────────────── */
+.stCaption, caption, .stMarkdown p, .stMarkdown li {
+    color: #152215 !important;
     font-weight: 400;
 }
+.stMarkdown strong, .stMarkdown b { color: #145214 !important; }
 
-/* ── 섹션 헤더 ────────────────────────────────────────────────── */
+/* ── 섹션 헤더: 진한 녹색 ──────────────────────────────────────── */
 h2, .stHeader, h3, .stSubheader {
-    color: #0d330d !important;   /* 진한 녹색-검정 */
+    color: #1b5e20 !important;
     font-weight: 600 !important;
     letter-spacing: -0.3px;
 }
 
-/* ── metric 카드: 흰색 둥근 박스 + 진한 강조값 ───────────────── */
+/* ── metric 카드: 흰색 둥근 박스 + 녹색 강조값 ───────────────── */
 div[data-testid="stMetric"],
 div[data-testid="metric-container"] {
     background-color: #ffffff !important;
     border-radius: 12px !important;
     padding: 8px 14px !important;
-    border: 1px solid #bcdcb8 !important;
-    box-shadow: 0 1px 5px rgba(50, 90, 30, 0.10) !important;
+    border: 1px solid #bcd8bc !important;
+    box-shadow: 0 1px 5px rgba(50,100,30,0.07) !important;
+    /* 카드 안 텍스트: 진한 다크 */
+    color: #152215 !important;
 }
 div[data-testid="stMetric"] span[data-testid="stMetricValue"],
 div[data-testid="metric-value"] {
-    color: #0a2e0a !important;   /* 진한 값 텍스트 */
+    color: #145214 !important;
     font-weight: 700 !important;
 }
 div[data-testid="stMetric"] span[data-testid="stMetricLabel"],
 div[data-testid="metric-label"] {
-    color: #1f3d1f !important;   /* 진한 라벨 텍스트 */
+    color: #2a4a2a !important;
     font-weight: 500 !important;
 }
 
 /* ── 탭: 둥근 모서리 + 연한 녹색 배경 ────────────────────────── */
 button[data-baseweb="tabs"] {
     border-radius: 10px !important;
-    background-color: #d6eccc !important;   /* 진한 연두 → 글자 대비 좋음 */
-    border: 1px solid #a8d6b0 !important;
+    background-color: #d8ebd4 !important;
+    border: 1px solid #a5c8a5 !important;
 }
 button[data-baseweb="tabs"] nav button {
     border-radius: 8px !important;
-    color: #112811 !important;              /* 진한 글자 → 연두 배경 위 잘 보임 */
+    color: #152215 !important;   /* 탭 텍스트: 진한 다크 */
     font-weight: 500;
 }
 button[data-baseweb="tabs"] nav button[aria-selected="true"] {
-    background-color: #86c896 !important;
-    color: #ffffff !important;              /* 진한 배경 위 흰색 글자 */
+    background-color: #a5d6a7 !important;
+    color: #145214 !important;
     font-weight: 600 !important;
 }
 
-/* ── 사이드바: 진한 연두 배경 + 둥근 위젯 ─────────────────────── */
+/* ── 비활성 탭 텍스트 ─────────────────────────────────────────── */
+button[data-baseweb="tabs"] nav button:not([aria-selected="true"]) {
+    color: #2a4a2a !important;
+}
+
+/* ── 사이드바: 연한 녹색 + 둥근 위젯 ──────────────────────────── */
 section[data-testid="stSidebar"] {
-    background-color: #d6eccc !important;    /* 진한 연두 → 옆 글씨 잘 보임 */
+    background-color: #e0f0da !important;
     border-radius: 0 0 18px 18px;
+    /* 사이드바 텍스트: 진한 다크 */
+    color: #152215 !important;
 }
 section[data-testid="stSidebar"] .stTextInput > div > div,
 section[data-testid="stSidebar"] .stSelectbox > div > div,
@@ -115,56 +122,55 @@ section[data-testid="stSidebar"] .stMultiselect > div > div,
 section[data-testid="stSidebar"] .stFileUploader > div > div {
     border-radius: 8px !important;
 }
-section[data-testid="stSidebar"] .stTextInput > div > label,
-section[data-testid="stSidebar"] .stSelectbox > div > label,
-section[data-testid="stSidebar"] .stMultiselect > div > label,
-section[data-testid="stSidebar"] .stFileUploader > div > label {
-    color: #112811 !important;              /* 진한 레이블 */
+section[data-testid="stSidebar"] label,
+section[data-testbar] .stFileUploader label,
+section[data-testid="stSidebar"] .stMarkdown p {
+    color: #152215 !important;
 }
 
 /* ── 슬라이더: 둥근 트랙 + 녹색 악센트 ────────────────────────── */
 input[type="range"] {
     border-radius: 6px;
-    accent-color: #388e3c;
+    accent-color: #43a047;
 }
 
-/* ── 다운로드 버튼: 둥근 녹색 버튼 + 흰색 글자 ───────────────── */
+/* ── 다운로드 버튼: 둥근 녹색 버튼 + 진한 흰색 텍스트 ────────── */
 .stDownloadButton,
 button[kind="primary"],
 button[kind="secondary"] {
     border-radius: 8px !important;
-    background-color: #2e7d32 !important;
+    background-color: #43a047 !important;
     color: #ffffff !important;
     border: none !important;
     font-weight: 500 !important;
 }
 .stDownloadButton:hover,
 button[kind="primary"]:hover {
-    background-color: #1b5e20 !important;
+    background-color: #2e7d32 !important;
 }
 
-/* ── dataframe: 흰색 둥근 카드 + 진한 글씨 ───────────────────── */
+/* ── dataframe: 둥근 흰색 카드 + 진한 텍스트 ─────────────────── */
 div[data-testid="stDataFrame"],
 div[data-testid="stExpandedData"] {
     border-radius: 10px !important;
-    border: 1px solid #bcdcb8 !important;
+    border: 1px solid #cde8cd !important;
     background-color: #ffffff !important;
+    color: #152215 !important;
 }
-div[data-testid="stDataFrame"] td,
-div[data-testid="stDataFrame"] th {
-    color: #112811 !important;              /* 진한 셀 글자 */
+div[data-testid="stDataFrame"] table th,
+div[data-testid="stDataFrame"] table td {
+    color: #152215 !important;
 }
 
-/* ── 정보/경고 박스 ───────────────────────────────────────────── */
+/* ── 정보/경고 박스: 연한 배경 + 진한 텍스트 ─────────────────── */
 div[data-testid="stAlert"] {
     border-radius: 10px !important;
-    background-color: #f1f8e9 !important;
+    background-color: #f1f7ec !important;
+    color: #152215 !important;
 }
-div[data-testid="stAlert"] .stAlert {
-    color: #112811 !important;
-}
+div[data-testid="stAlert"] strong { color: #1b5e20 !important; }
 
-/* ── plotly 차트 컨테이너: 흰색 둥근 박스 ────────────────────── */
+/* ── plotly 차트 컨테이너: 둥근 흰색 박스 ────────────────────── */
 div[data-testid="stPlotlyChart"] {
     border-radius: 10px !important;
     background-color: #ffffff !important;
@@ -173,21 +179,32 @@ div[data-testid="stPlotlyChart"] {
 
 /* ── spinner ──────────────────────────────────────────────────── */
 div[data-testid="stSpinner"] {
-    border-color: #388e3c !important;
+    border-color: #43a047 !important;
 }
 
 /* ── 구분선 ───────────────────────────────────────────────────── */
 hr {
-    border-color: #bcdcb8;
+    border-color: #c8e6c9;
     border-radius: 4px;
 }
 
-/* ── info 박스 안 이모지 살짝 키우기 ──────────────────────────── */
-.stAlert svg { display: none; }
+/* ── plotly 레이아웃 폰트 색: 진한 다크 (그래프 위에서도 잘 보임) */
+.js-plotly-plot .plotly .main-svg text,
+.js-plotly-plot .plotly .main-svg .hoverlayer text {
+    fill: #152215 !important;
+    font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif !important;
+}
+.js-plotly-plot .plotly .main-svg .hoverlayer .hovertext text {
+    fill: #152215 !important;
+}
 
-/* ── 그래프 hover 템플릿 글자색(Plotly 렌더러 대상) ─────────── */
-.js-plotly-plot .plotly .hovertext text {
-    color: #112811 !important;
+/* ── plotly 호버 박스 배경: 흰색 + 진한 텍스트 ──────────────── */
+.js-plotly-plot .plotly .hoverlayer .hovertext {
+    background-color: #ffffff !important;
+    color: #152215 !important;
+    border: 1px solid #bcd8bc !important;
+    border-radius: 6px !important;
+    box-shadow: 0 1px 4px rgba(40,90,30,0.12) !important;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -299,8 +316,7 @@ st.markdown(
     """
     <div class="banner-green">
         <b>🌱 같은 스마트팜, 다른 결과?</b><br>
-        같은 환경에서 자란 극지식물 개체들 사이에 나타나는
-        <b>큰 생육 차이</b>와<br>
+        같은 환경에서 자란 극지식물 개체들 사이에 나타나는 <b>큰 생육 차이</b>와<br>
         그 차이를 만드는 <b>핵심 요인</b>을 함께 살펴봅시다.
     </div>
     """,
@@ -308,10 +324,7 @@ st.markdown(
 )
 
 st.title("🌿 극지식물 생육 차이 핵심 요인 분석 대시보드")
-st.caption(
-    "길이보다 '잎 수'가 생중량을 결정한다 — "
-    "같은 환경, 다른 개체, 다른 결과"
-)
+st.caption("길이보다 '잎 수'가 생중량을 결정한다 — 같은 환경, 다른 개체, 다른 결과")
 
 # ─────────────────────────────────────────────────────────────────────
 # 사이드바
@@ -365,8 +378,7 @@ if growth_file is not None:
 st.sidebar.markdown("---")
 st.sidebar.caption(
     f"🌡️ 환경: {env_name}  ·  🌱 생육: {growth_name}"
-    if env_file or growth_file
-    else "아직 파일이 업로드되지 않았어요."
+    if env_file or growth_file else "아직 파일이 업로드되지 않았어요."
 )
 
 # ═════════════════════════════════════════════════════════════════════
@@ -404,29 +416,25 @@ with tabs[0]:
                         st.metric(
                             "평균 온도",
                             f"{env_df['temperature'].dropna().mean():.1f} °C"
-                            if "temperature" in env_df.columns
-                            else "—",
+                            if "temperature" in env_df.columns else "—",
                         )
                     with col2:
                         st.metric(
                             "평균 습도",
                             f"{env_df['humidity'].dropna().mean():.1f} %"
-                            if "humidity" in env_df.columns
-                            else "—",
+                            if "humidity" in env_df.columns else "—",
                         )
                     with col3:
                         st.metric(
                             "평균 EC",
                             f"{env_df['ec'].dropna().mean():.2f} mS/cm"
-                            if "ec" in env_df.columns
-                            else "—",
+                            if "ec" in env_df.columns else "—",
                         )
                     with col4:
                         st.metric(
                             "평균 pH",
                             f"{env_df['ph'].dropna().mean():.1f}"
-                            if "ph" in env_df.columns
-                            else "—",
+                            if "ph" in env_df.columns else "—",
                         )
                     ecols = st.columns(min(len(env_cols_display), 3))
                     for idx, cname in enumerate(env_cols_display):
@@ -477,8 +485,8 @@ with tabs[0]:
                             title="📅 날짜별 환경 지표 시계열",
                             template="plotly_white",
                             font=dict(
-                                family="Malgun Gothic, "
-                                "Apple SD Gothic Neo, sans-serif"
+                                family="Malgun Gothic, Apple SD Gothic Neo, sans-serif",
+                                color="#152215",
                             ),
                             height=260 + 160 * (n_rows - 1),
                             margin=dict(l=40, r=20, t=40, b=30),
@@ -486,8 +494,7 @@ with tabs[0]:
                         st.plotly_chart(fig_env, width="stretch")
                 else:
                     st.info(
-                        "⚠️ 환경 CSV에 인식할 수 있는 열"
-                        "(온도, 습도, EC, pH)이 없어요."
+                        "⚠️ 환경 CSV에 인식할 수 있는 열(온도, 습도, EC, pH)이 없어요."
                     )
 
             # ── 개체별 생중량 막대그래프 ────────────────────────────
@@ -514,8 +521,8 @@ with tabs[0]:
                         y=g_sorted["생중량"].values,
                         marker_color=colors,
                         hovertemplate=(
-                            "<b>개체 %{x}</b><br>"
-                            "생중량: %{y:.2f} g<extra></extra>"
+                            "<b>개체 %{x}</b><br>생중량: %{y:.2f} g"
+                            "<extra></extra>"
                         ),
                     ))
                     if top_n > 0:
@@ -524,7 +531,7 @@ with tabs[0]:
                             y=g_sorted["생중량"].iloc[top_n - 1],
                             text="⬆ 상위 25%",
                             showarrow=False,
-                            font=dict(size=11, color="#e74c3c"),
+                            font=dict(size=11, color="#152215"),
                             yshift=5,
                         )
                     if bottom_n > 0:
@@ -533,7 +540,7 @@ with tabs[0]:
                             y=g_sorted["생중량"].iloc[n - bottom_n],
                             text="⬇ 하위 25%",
                             showarrow=False,
-                            font=dict(size=11, color="#27ae60"),
+                            font=dict(size=11, color="#152215"),
                             yshift=5,
                         )
                     fig_bar.update_layout(
@@ -543,8 +550,8 @@ with tabs[0]:
                         ),
                         template="plotly_white",
                         font=dict(
-                            family="Malgun Gothic, "
-                            "Apple SD Gothic Neo, sans-serif"
+                            family="Malgun Gothic, Apple SD Gothic Neo, sans-serif",
+                            color="#152215",
                         ),
                         xaxis_title="개체",
                         yaxis_title="생중량 (g)",
@@ -599,9 +606,7 @@ with tabs[0]:
                         "값이 클수록 <b>개체 간 차이가 크다</b>는 뜻이에요. "
                         "평균이 0이면 CV는 표시하지 않아요."
                     )
-                    st.dataframe(
-                        df_dist, width="stretch", use_container_width=False
-                    )
+                    st.dataframe(df_dist, width="stretch", use_container_width=False)
                     st.download_button(
                         "📥 CV 비교 표 다운로드 (CSV)",
                         csv_bytes(df_dist),
@@ -623,10 +628,7 @@ with tabs[0]:
 with tabs[1]:
     try:
         if growth_file is None or growth_df.empty:
-            st.info(
-                "☝️ 사이드바에서 생육 CSV를 올려주세요. "
-                "상관관계 그래프를 볼 수 있어요."
-            )
+            st.info("☝️ 사이드바에서 생육 CSV를 올려주세요. 상관관계 그래프를 볼 수 있어요.")
         else:
             needed_pairs = [
                 ("지상부 길이", "지하부 길이", "지상부 길이 vs 지하부 길이", "#3498db"),
@@ -691,14 +693,11 @@ with tabs[1]:
                         row=row, col=col,
                     )
                 fig_scatter.update_layout(
-                    title=(
-                        "📊 생육 변수 간 상관관계 비교 "
-                        "(빨간 점선 = 추세선)"
-                    ),
+                    title="📊 생육 변수 간 상관관계 비교 (빨간 점선 = 추세선)",
                     template="plotly_white",
                     font=dict(
-                        family="Malgun Gothic, "
-                        "Apple SD Gothic Neo, sans-serif"
+                        family="Malgun Gothic, Apple SD Gothic Neo, sans-serif",
+                        color="#152215",
                     ),
                     height=300 + 180 * (n_rows - 1),
                     margin=dict(l=40, r=20, t=50, b=40),
@@ -793,8 +792,8 @@ with tabs[2]:
                             barmode="group",
                             template="plotly_white",
                             font=dict(
-                                family="Malgun Gothic, "
-                                "Apple SD Gothic Neo, sans-serif"
+                                family="Malgun Gothic, Apple SD Gothic Neo, sans-serif",
+                                color="#152215",
                             ),
                             xaxis_title="측정 항목",
                             yaxis_title="평균값",
@@ -816,9 +815,7 @@ with tabs[2]:
                             )
                         df_cmp_table = pd.DataFrame(rows_tbl)
                         st.dataframe(
-                            df_cmp_table,
-                            width="stretch",
-                            use_container_width=False,
+                            df_cmp_table, width="stretch", use_container_width=False
                         )
                         st.download_button(
                             "📥 그룹 비교 표 다운로드 (CSV)",
@@ -882,8 +879,7 @@ with tabs[2]:
                                     min_value=0,
                                     max_value=max(leaf_max, 10),
                                     value=min(
-                                        int(lm["잎 수"].median()),
-                                        leaf_max,
+                                        int(lm["잎 수"].median()), leaf_max
                                     ),
                                     step=1,
                                 )
